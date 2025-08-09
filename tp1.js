@@ -8,8 +8,10 @@ let productos = [
 ]
 
 //Consigna 2
-
-
-//console.log(productos);
+// Longitud total.
+console.log("Longitud de la lista: ", productos.length);
+// Imprimir por consola el nombre del 2do y 4to elemento del array utilizando su indice.
+console.log("Nombre segundo elemento: ", productos[1].nombre);
+console.log("Nombre cuarto elemento: ", productos[3].nombre);
 
 
