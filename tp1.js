@@ -15,3 +15,20 @@ console.log("Nombre segundo elemento: ", productos[1].nombre);
 console.log("Nombre cuarto elemento: ", productos[3].nombre);
 
 
+//Consigna 3
+// Nombre y precio de cada producto
+for (let i = 0; i < productos.length; i++) {
+    console.log(productos[i].nombre);
+    console.log(productos[i].precio);
+    console.log("-----------------------");
+};
+
+// Método 'forEach()', con frase descriptiva.
+// Funcion flecha
+productos.forEach((producto) => {
+    console.log("Id del producto: ", producto.Id);
+    console.log("Nombre del producto: ", producto.nombre);
+    console.log("Precio del producto: ", producto.precio);
+    console.log("Stock del producto: ", producto.stock);
+    console.log("-----------------------");
+});
