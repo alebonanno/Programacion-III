@@ -22,3 +22,17 @@ fetch(url) //solicitud de datos al servidor de la URL
     console.log(error);
 })
 
+
+// Recuperar un numero limitado de productos.
+const fs = require('fs');
+fetch("https://fakestoreapi.com/products?limit=5")
+    .then(res => res.json())
+    .then(json => {
+        console.log("Muestra de 5 productos: ")
+        console.log(json)
+
+        // Guardado de productos limitados.
+        fs.writeFileSync('productos.json', JSON.stringify(json, null, 2), 'utf-8');
+        console.log("Datos guardados en 'productos.json'");
+    })
+    .catch(error => console.log("Error: ", error));
