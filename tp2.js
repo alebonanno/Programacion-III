@@ -36,3 +36,28 @@ fetch("https://fakestoreapi.com/products?limit=5")
         console.log("Datos guardados en 'productos.json'");
     })
     .catch(error => console.log("Error: ", error));
+
+
+// Agregado de producto.
+fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+        title: 'Notebook AlienWare',
+        price: 800.00,
+        description: 'Notebook Gamer',
+        category: 'Tecnology',
+        rating: { rate: 4.8, count: 400 }
+    }),
+    headers: {'Content-Type' : 'application/json'}
+})
+    .then(res => res.json())
+    .then(data => console.log("Producto agregado: ", data));
+
+// Busqueda por 'ID' de un producto.
+fetch("https://fakestoreapi.com/products/7")
+    .then(res => res.json())
+    // Muestra el producto con 'ID' 7.
+    .then(data => {
+        console.log("Busqueda del producto con ID 7.")
+        console.log("Producto encontrado: ", data)
+    });
