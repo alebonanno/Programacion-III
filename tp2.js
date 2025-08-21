@@ -107,7 +107,6 @@ const acProducto = {
 actualizarProducto(3, acProducto)
 
 // FileSystem.
-// La primera ejecución puede dar error, ya que no existe el 'archivo JSON', al ejecutarse de nuevo, funciona.
 //Agregar producto al archivo local "JSON".
 const agregarProductoLocal = (nuevoProducto, archivo = "productos.json") => {
     try{
