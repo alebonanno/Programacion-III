@@ -123,6 +123,48 @@ app.get('/salones/:salon_id', async(req, res) => {
     }
 });
 
+// PUT para editar 1 salon, necesario editar todos los datos.
+// Ruta Express.
+// ":" Indica que es un parámetro dinámico.
+app.put('/salones/:salon_id', async(req, res) => {
+    
+    try{
+        // Accede al valor especifico del parámetro llamado 'salon_id' que se define en la ruta Express.
+        // req.params, Siempre es un string, aunque sea un número.
+        const salon_id = req.params.salon_id;
+        // Desestructura el body del request, toma los campos mandados desde bruno, y los guarda es las variables.
+        const {titulo, direccion, latitud, longitud, capacidad, importe, activo} = req.body;
+
+
+        // SET: lo que se puede modificar/va a modificarse.
+        const sql = `
+            UPDATE salones
+            SET titulo = ?, direccion = ?, latitud = ?, longitud = ?, capacidad = ?, importe = ?, activo = ?, modificado = NOW()
+            WHERE salon_id = ? AND activo = 1
+        `;
+
+        // Debe coincidir con SET, en ese orden.
+        // salon_id: coincide con WHERE, no se modifica.
+        const [results] = await conexion.query(sql, [
+            titulo, direccion, latitud, longitud, capacidad, importe, activo, salon_id
+        ]);
+
+        // Verificación si esta activo el salón.
+        if(results.affectedRows === 0){
+            return res.status(404).json({ok:false, error: 'No se encontro el salón o está inactivo.'});
+        };
+
+        // Retorno de datos.
+        res.json({'ok':true, mensaje:'Salón actualizado.'});
+
+    }catch (error){
+        console.log(`Error en modificar: ${error}`);
+        res.status(500).json({ok:false, error: 'Error al actualizar.'});
+    };
+      
+});
+
+
 // Carga de las variables de entorno.
 process.loadEnvFile();
 console.log(process.env.PUERTO);
