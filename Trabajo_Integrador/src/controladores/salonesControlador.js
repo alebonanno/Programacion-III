@@ -56,4 +56,65 @@ export default class SalonesControlador{
             });
         }
     };
+
+    editarSalonPorId = async (req, res) => {
+        try{
+            const { salon_id } = req.params;
+            const datos = req.body;
+
+            // Para que 'activo' tenga un valor siempre y no 'Null'.
+            if (typeof datos.activo === 'undefined' || datos.activo === null) {
+                // Se le asigna '0' inactivo, por defecto.
+                datos.activo = 0;
+            };
+
+            // Ejecuta método 'editarPoId' de 'SalonesServicio'.
+            // Se le pasa 'salon_id' y los nuevos datos.
+            // Espera la respuesta de SalonesServicio.
+            const resultado = await this.SalonesServicio.editarPorId(salon_id, datos);
+
+            // Verifica si la operación fue falsa.
+            if (!resultado.ok){
+                return res.status(404).json(resultado);
+            };
+
+            // Return exitoso.
+            return res.status(200).json({
+                ok:true,
+                mensaje:'Salón actualizado correctamente.'
+            });
+            
+        }catch (error){
+            console.log('Error en editarSalonPoId(Controlador): ', error);
+            return res.status(500).json({
+                ok:false,
+                error: 'Ocurrio un error al intentar actualizar el salón.'
+            });
+        };
+    };
+
+    // Borrado logico por ID.
+    eliminarSalonPorId = async (req, res) => {
+        try{
+            const { salon_id } = req.params;
+            const resultado = await this.SalonesServicio.eliminarPorId(salon_id);
+
+            if (!resultado){
+                return res.status(404).json(resultado);
+            }
+
+            // 'mensaje(db) => Servicio => Controlador.'
+            return res.status(200).json({
+                ok:true,
+                mensaje: resultado.mensaje
+            });
+
+        }catch (error){
+            console.log('Error al eliminar salón: '. error);
+            return res.status(500).json({
+                ok:false,
+                error: 'Error interno al intentar eliminar el salón.'
+            });
+        }
+    }
 }

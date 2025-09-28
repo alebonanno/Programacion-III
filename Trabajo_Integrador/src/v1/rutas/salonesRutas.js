@@ -11,8 +11,10 @@ const router = express.Router();
 router.get('/', salonesControlador.buscarTodos);
 // Busqueda por 'ID' de salon.
 router.get('/:salon_id', salonesControlador.buscarPorId);
+// Busca por 'ID' para editar el salón.
+router.put('/:salon_id', salonesControlador.editarSalonPorId);
+// Busca por 'ID' para hacer el 'borrado logico'.
+router.delete('/:salon_id', salonesControlador.eliminarSalonPorId);
 // router.post('/', salonesControlador.);
-// router.put('/', salonesControlador.);
-// router.delete('/', salonesControlador.);
 
 export { router };

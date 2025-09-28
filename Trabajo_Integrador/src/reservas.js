@@ -16,6 +16,7 @@ app.use(express.json());
 // Que use las rutas que se le pasen.
 // '/api' => se pone por convencion.
 // '/v1 => es al version 1, tambien debe ponerse en 'bruno' manualmente.
+// Esta sola ruta, maneja CRUD => BREAD.
 app.use('/api/v1/salones', v1SalonesRutas);
 app.use('/api/v1/notificaciones', v1notificacionRouter);
 
@@ -29,120 +30,6 @@ app.use('/api/v1/notificaciones', v1notificacionRouter);
 // })
 
 
-
-
-
-
-// // PUT para editar 1 salon, necesario editar todos los datos.
-// // Ruta Express.
-// // ":" Indica que es un parámetro dinámico.
-// app.put('/salones/:salon_id', async(req, res) => {
-    
-//     try{
-//         // Accede al valor especifico del parámetro llamado 'salon_id' que se define en la ruta Express.
-//         // req.params, Siempre es un string, aunque sea un número.
-//         const salon_id = req.params.salon_id;
-//         // Desestructura el body del request, toma los campos mandados desde bruno, y los guarda es las variables.
-//         const {titulo, direccion, latitud, longitud, capacidad, importe, activo} = req.body;
-
-
-//         // SET: lo que se puede modificar/va a modificarse.
-//         const sql = `
-//             UPDATE salones
-//             SET titulo = ?, direccion = ?, latitud = ?, longitud = ?, capacidad = ?, importe = ?, activo = ?, modificado = NOW()
-//             WHERE salon_id = ? AND activo = 1
-//         `;
-
-//         // Debe coincidir con SET, en ese orden.
-//         // salon_id: coincide con WHERE, no se modifica.
-//         const [results] = await conexion.query(sql, [
-//             titulo, direccion, latitud, longitud, capacidad, importe, activo, salon_id
-//         ]);
-//         // Debug para ver affectedRows.
-//         console.log(results);
-
-//         // Verificación si esta activo el salón o si se vio afectado auqnue no se modifico nada.
-//         // affectedRows === 0 -> Significa que ninguna fila cumplió con el WHERE.
-//         // Entonces el salón no existe o esta inactivo.
-//         if(results.affectedRows === 0){
-//             return res.status(404).json({ok:false, error: 'No se encontro el salón o está inactivo.'});
-//         };
-
-//         // Retorno de datos.
-//         // res.json({'ok':true, mensaje:'Salón actualizado.'});
-
-//         // Esta version s la misma de arriba(linea 162).
-//         res.status(200).json({
-//             ok:true,
-//             mensaje: 'Salón actualizado.'
-//         });
-
-//     }catch (error){
-//         console.log(`Error en modificar: ${error}`);
-//         res.status(500).json({ok:false, error: 'Error al actualizar.'});
-//     };
-      
-// });
-
-
-// // DELETE para borrar un salón.
-// app.delete('/salones/:salon_id', async(req, res) => {
-    
-//     try{
-//         // Accede al valor especifico del parámetro llamado 'salon_id' que se define en la ruta Express.
-//         // req.params, Siempre es un string, aunque sea un número.
-//         const salon_id = req.params.salon_id;
-//         // Consulta si existe un salón activo con el 'ID'.
-//         const sql = `
-//             SELECT * FROM salones WHERE activo = 1 and salon_id = ?
-//         `;
-
-//         // Ejecuta la consulta anterior(linea 177), reemplaza '?' por elvalor de 'salon_id'.
-//         const [results] = await conexion.query(sql, [salon_id]);
-//         // Debug para ver resultados del SELECT.
-//         console.log(results);
-
-//         // Verifica si, no se encontró ningun salón con ese ID activo.
-//         // Ya que, si el array esta vacio, es porque no encontro el salón.
-//         if(results.length === 0){
-//             return res.status(404).json({
-//                 estado: false,
-//                 mensaje: 'El salón no existe.'
-//             });
-//         };
-
-//         // Nueva variable para aplicar la modificación, simulando el DELETE.
-//         // Si encuentra el salón y esta activo lo inactiva, hace borrado logico.
-//         // sql2 => Se usa esta variable ya que, la variable 'sql' ya esta siendo utilizada.
-//         const sql2 = `
-//             UPDATE salones
-//             SET activo = 0
-//             WHERE salon_id = ?
-//         `;
-
-//         // Ejecuta la consulta 'UPDATE', inactiva el salón según el 'ID'.
-//         // 'results2' contiene información como 'affectedRows', que verifica si se modificaron filas.
-//         const [results2] = await conexion.execute(sql2, [salon_id]);
-
-//         // Debug, para ver 'affectedRows'.
-//         console.log(results2)
-
-//         // Devuelve un mensaje confirmando la eliminacion(Borrado logico).
-//         res.status(200).json({
-//             estado: true,
-//             mensaje: 'Salón eliminado.'
-//         });
-
-//     }catch (error){
-//         console.log(`Error en eliminar el salón: ${error}`);
-//         res.status(500).json({ok:false, error: 'Error al eliminar.'});
-//     };
-      
-// });
-
-
-
-// Lineas 36-141 comentadas.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
