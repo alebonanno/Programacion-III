@@ -99,7 +99,7 @@ export default class SalonesControlador{
             const { salon_id } = req.params;
             const resultado = await this.SalonesServicio.eliminarPorId(salon_id);
 
-            if (!resultado){
+            if (!resultado.ok){
                 return res.status(404).json(resultado);
             }
 
@@ -110,10 +110,42 @@ export default class SalonesControlador{
             });
 
         }catch (error){
-            console.log('Error al eliminar salón: '. error);
+            console.log('Error al eliminar salón: ', error);
             return res.status(500).json({
                 ok:false,
                 error: 'Error interno al intentar eliminar el salón.'
+            });
+        }
+    }
+
+    crearSalon = async (req, res) => {
+        try{
+            // Extracción de datos enviados en el cuerpo del request.
+            const datos = req.body;
+
+            // Validación.
+            if (!datos.titulo || !datos.capacidad){
+                return res.status(400).json({
+                    error: 'Faltan datos obligatorios.'
+                });
+            };
+
+            // Llamada al servicio para crear el salón.
+            const resultado = await this.SalonesServicio.crearSalon(datos);
+
+            // Retorna con exito y el 'ID' del salón creado.
+            return res.status(201).json({
+                ok: true,
+                mensaje: 'Salón creado correctamente.',
+                salon_id: resultado.salon_id
+            });
+
+        }catch (error){
+            // Ultima linea de defensa para manejar cualquier error.
+            console.log("Error en crearSalon (controlador): ", error);
+            return res.status(500).json({
+                ok:false,
+                error: 'Error interno al crear el salón.'
             });
         }
     }

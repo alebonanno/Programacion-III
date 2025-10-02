@@ -39,7 +39,7 @@ export default class SalonesServicio {
         return resultado;
     }
 
-    // // Necesita el id del salon por parametro.
+    // Necesita el id del salon por parametro.
     eliminarPorId = async (id) => {
 
         // Verificación de si existe.
@@ -55,5 +55,21 @@ export default class SalonesServicio {
         // Llama al modelo/salón para el borrado logico.
         // Mensaje pasa por aqui, va a 'mensaje: resultado.mensaje' del controlador.
         return await this.salones.eliminarPorId(id);
+    };
+
+    // Creación del salón.
+    crearSalon = async (datos) => {
+        try{
+            // Llama al método de la clase 'Salones' (db), que realmente hace el INSERT.
+            const resultado = await this.salones.crearSalon(datos);
+            // Retorna el resultado para el controlador.
+            return resultado;
+
+        }catch (error){
+            console.log("Error en crearSalon (Servicio): ", error);
+            // throw => Si hubo un error aqui, no lo maneja, lo pasa para que lo maneje quien llamo la función.
+            // Manda el error a 'controlador'.
+            throw error;
+        }
     };
 }

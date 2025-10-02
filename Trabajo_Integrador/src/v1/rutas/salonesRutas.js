@@ -15,6 +15,7 @@ router.get('/:salon_id', salonesControlador.buscarPorId);
 router.put('/:salon_id', salonesControlador.editarSalonPorId);
 // Busca por 'ID' para hacer el 'borrado logico'.
 router.delete('/:salon_id', salonesControlador.eliminarSalonPorId);
-// router.post('/', salonesControlador.);
+// Crea un salón.
+router.post('/', salonesControlador.crearSalon);
 
 export { router };
