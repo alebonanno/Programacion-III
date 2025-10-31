@@ -1,5 +1,6 @@
 import Salones from "../db/salones.js";
 import SalonesServicio from "../servicios/salonesServicio.js";
+import { apicacheInstance } from '../middlewares/apicache.js';
 
 export default class SalonesControlador{
     
@@ -57,6 +58,7 @@ export default class SalonesControlador{
         }
     };
 
+
     editarSalonPorId = async (req, res) => {
         try{
             const { salon_id } = req.params;
@@ -77,6 +79,10 @@ export default class SalonesControlador{
             if (!resultado.ok){
                 return res.status(404).json(resultado);
             };
+
+            // Limpia el caché.
+            apicacheInstance.clear('/salones');
+            apicacheInstance.clear('/salones/${salon_id}');
 
             // Return exitoso.
             return res.status(200).json({
@@ -102,6 +108,10 @@ export default class SalonesControlador{
             if (!resultado.ok){
                 return res.status(404).json(resultado);
             }
+
+            // Limpia el caché.
+            apicacheInstance.clear('/salones');
+            apicacheInstance.clear('/salones/${salon_id}');
 
             // 'mensaje(db) => Servicio => Controlador.'
             return res.status(200).json({
@@ -132,6 +142,9 @@ export default class SalonesControlador{
 
             // Llamada al servicio para crear el salón.
             const resultado = await this.SalonesServicio.crearSalon(datos);
+
+            // Limpia cache luego de crear el salon nuevo.
+            apicacheInstance.clear('/salones')
 
             // Retorna con exito y el 'ID' del salón creado.
             return res.status(201).json({

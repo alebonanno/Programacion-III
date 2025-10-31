@@ -29,19 +29,19 @@ export default class Salones{
     editarSalonPorId = async(salon_id, datos) => {
         try{
             const {titulo, direccion, latitud, longitud, capacidad, importe, activo} = datos;
-    
+
             const sql = `
                 UPDATE salones
                 SET titulo = ?, direccion = ?, latitud = ?, longitud = ?, capacidad = ?, importe = ?, activo = ?, modificado = NOW()
                 WHERE salon_id = ?
             `;
-    
+
             const [results] = await conexion.query(sql, [
                 titulo, direccion, latitud, longitud, capacidad, importe, activo, salon_id
             ]);
             // Debug para ver affectedRows.
             console.log(results);
-    
+
             // Verifica si se actualizo algún registro.
             if(results.affectedRows === 0){
                 return ({
@@ -49,51 +49,50 @@ export default class Salones{
                     error: 'No se encontro el salón o está inactivo.'
                 });
             };
-    
+
             // Retorno exitoso.
             return { 
                 ok: true, 
                 mensaje: 'Salón actualizado correctamente.' 
             };
-    
+
         }catch (error){
             console.log('Error en editarSalón (salones.js)', error);
             throw error
         }
     };
-    
-    // Solo simula el 'borralo logico'.
-    // Solo necesito el 'id'.
+
     // Solo simula el 'borralo logico'.
     eliminarPorId = async (salon_id) => {
         try{
-    
+
             const sql = `
                 UPDATE salones
                 SET activo = 0, modificado = NOW()
                 WHERE salon_id =? AND activo = 1
             `;
-    
+
             const [result] = await conexion.query(sql, [salon_id]);
-    
+
             if (result.affectedRows === 0) {
                 return {
                     ok: false,
                     error: 'Salón no encontrado o ya estaba inactivo.'
                 };
             }
-    
+
             // 'mensaje => Servicio => Controlador.'
             return {
                 ok: true,
                 mensaje: 'Salón desactivado correctamente.'
             };
-    
+
         }catch (error){
             console.log('Error en eliminarPoId (salones.js => db)', error);
             throw error;
         }
     };
+
 
     //  Creacion del salón para la 'db'.
     // Recibe el objeto 'datos' con info necesaria.
