@@ -7,6 +7,8 @@ export default function autorizarUsuario(perfilAutorizados = [] ) {
         // ej => router.get('/:reserva_id', autorizarUsuarios([1,2,3]), reservasControlador.buscarPorId);
         // [1,2,3] estan incluidos.
         if(!usuario || !perfilAutorizados.includes(usuario.tipo_usuario)) {
+            // Debug
+            console.log("Usuario en req.user: ", req.user);
             // No esta incluido.
             return res.status(403).json({
                 estado: "Falla",

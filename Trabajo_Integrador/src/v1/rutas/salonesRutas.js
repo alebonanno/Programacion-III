@@ -1,9 +1,11 @@
 import express from 'express';
 import SalonesControlador from '../../controladores/salonesControlador.js';
-import validarCampos from '../../controladores/salonesControlador.js';
+import { validarCampos } from '../../middlewares/validarCampos.js';
 import { cache } from '../../middlewares/apicache.js'
 import { check } from 'express-validator';
 import autorizarUsuarios from "../../middlewares/autorizarUsuario.js"
+import passport from 'passport'
+
 
 // Instancia
 const salonesControlador = new SalonesControlador();
@@ -16,15 +18,39 @@ const router = express.Router();
 
 // Usa el controlador de salones, y el metodo 'buscar todos()'.
 // cache => Por 5 minutos los salones quedaran cacheados en la memoria del server.
-router.get('/', cache('5 minutos'), autorizarUsuarios([1,2,3]), salonesControlador.buscarTodos);
+router.get('/', 
+    cache('5 minutos'), 
+    passport.authenticate('jwt', { session: false }),
+    autorizarUsuarios([1,2,3]), 
+    salonesControlador.buscarTodos
+);
+
 // Busqueda por 'ID' de salon.
-router.get('/:salon_id', cache('5 minutos'), autorizarUsuarios([1,2]), salonesControlador.buscarPorId);
+router.get('/:salon_id', 
+    cache('5 minutos'),
+    passport.authenticate('jwt', { session: false }), 
+    autorizarUsuarios([1,2]), 
+    salonesControlador.buscarPorId
+);
+
 // Busca por 'ID' para editar el salón.
-router.put('/:salon_id', autorizarUsuarios([1,2]), salonesControlador.editarSalonPorId);
+router.put('/:salon_id',
+    passport.authenticate('jwt', { session: false }), 
+    autorizarUsuarios([1,2]), 
+    salonesControlador.editarSalonPorId
+);
+
 // Busca por 'ID' para hacer el 'borrado logico'.
-router.delete('/:salon_id', autorizarUsuarios([1,2]), salonesControlador.eliminarSalonPorId);
+router.delete('/:salon_id',
+    passport.authenticate('jwt', { session: false }), 
+    autorizarUsuarios([1,2]), 
+    salonesControlador.eliminarSalonPorId
+);
+
 // Crea un salón.
-router.post('/', autorizarUsuarios([1,2]), 
+router.post('/', autorizarUsuarios([1,2]),
+    passport.authenticate('jwt', { session: false }), 
+    autorizarUsuarios([1,2]), 
     // Uso de express validator.
     // notEmpty() => Verifica que el campo no este vacio.
     // isInt() => Verifica que el campo sea un entero positivo, mayor o igual a 1.
