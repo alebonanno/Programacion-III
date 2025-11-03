@@ -50,7 +50,7 @@ const router = express.Router();
  *        description: Reserva no encontrada.
 */
 // autorizarUsuarios([1,2,3]) => Admin, empleado y cliente pueden buscar por ID una reserva.
-router.get('/:reserva_id', autorizarUsuarios([1,2,3]), reservasControlador.buscarPorId);
+router.get('/:reserva_id', autorizarUsuarios([1,2]), reservasControlador.buscarPorId);
 
 
 /**
@@ -228,8 +228,8 @@ router.post('/', autorizarUsuarios([1,3]),
  *         description: Error interno.
  */
 
-// Ruta para editar las reservas, solo admnin y cliente.
-router.patch('/:reserva_id', autorizarUsuarios([1,3]), reservasControlador.editar);
+// Ruta para editar las reservas, solo admnin.
+router.patch('/:reserva_id', autorizarUsuarios([1]), reservasControlador.editar);
 
 
 export { router };
