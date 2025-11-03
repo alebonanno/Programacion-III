@@ -74,4 +74,76 @@ export default class Reservas {
         return reserva[0];
     };
 
+     actualizarReserva = async (reserva_id, datos) => {
+        const {
+            fecha_reserva,
+            salon_id,
+            usuario_id,
+            turno_id,
+            foto_cumpleaniero,
+            tematica,
+            importe_salon,
+            importe_total,
+            activo
+        } = datos;
+
+        const sql = `
+        UPDATE reservas
+        SET fecha_reserva = ?, salon_id = ?, usuario_id = ?, turno_id = ?, 
+            foto_cumpleaniero = ?, tematica = ?, importe_salon = ?, importe_total = ?, activo = ?, 
+            modificado = NOW()
+        WHERE reserva_id = ?
+        `;
+
+        const [result] = await conexion.execute(sql, [
+            fecha_reserva,
+            salon_id,
+            usuario_id,
+            turno_id,
+            foto_cumpleaniero,
+            tematica,
+            importe_salon,
+            importe_total,
+            activo,
+            reserva_id
+        ]);
+
+        // Verifica si se actualizo algún registro.
+        if(result.affectedRows === 0){
+            return ({
+                ok:false, 
+                error: 'No se encontro la reserva o está inactiva.'
+            });
+        };
+
+        return this.buscarPorId(reserva_id);
+
+    };
+
+
+    // Esta función es para el informe CSV - PDF.
+    obtenerDatosReservas = async () => {
+        const sql = `
+            SELECT
+                r.reserva_id AS id_reserva,
+                DATE_FORMAT(r.fecha_reserva, '%Y-%m-%d') AS fecha_reserva,
+                s.titulo AS salon,
+                t.orden AS turno,
+                r.foto_cumpleaniero AS foto,
+                r.tematica,
+                r.importe_salon,
+                r.importe_total,
+                r.activo,
+                DATE_FORMAT(r.creado, '%Y-%m-%d %H:%i:%s') AS creado,
+                DATE_FORMAT(r.modificado, '%Y-%m-%d %H:%i:%s') AS modificado
+             FROM reservas r
+            LEFT JOIN salones s ON r.salon_id = s.salon_id
+            LEFT JOIN turnos t ON r.turno_id = t.turno_id
+            ORDER BY r.fecha_reserva ASC;
+            `;
+        const [rows] = await conexion.query(sql);
+        console.log("Datos encontrados: ", rows);
+        return rows; // devuelve un array, aunque esté vacío
+    };
+
 };

@@ -158,4 +158,78 @@ router.post('/', autorizarUsuarios([1,3]),
 
 );
 
+
+/**
+ * @swagger
+ * /api/v1/reservas/{reserva_id}:
+ *   patch:
+ *     summary: Editar una reserva existente (solo los campos enviados en JSON)
+ *     tags: [Reservas]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: reserva_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la reserva a actualizar.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fecha_reserva:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-11-20"
+ *               salon_id:
+ *                 type: integer
+ *                 example: 2
+ *               turno_id:
+ *                 type: integer
+ *                 example: 1
+ *               foto_cumpleaniero:
+ *                 type: string
+ *                 format: uri
+ *                 nullable: true
+ *                 example: null
+ *               tematica:
+ *                 type: string
+ *                 example: "Plim plim"
+ *               importe_salon:
+ *                 type: number
+ *                 nullable: true
+ *                 example: 100000
+ *               importe_total:
+ *                 type: number
+ *                 example: 200000
+ *               activo:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Reserva actualizada correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 reserva:
+ *                   type: object
+ *       404:
+ *         description: Reserva no encontrada.
+ *       500:
+ *         description: Error interno.
+ */
+
+// Ruta para editar las reservas, solo admnin y cliente.
+router.patch('/:reserva_id', autorizarUsuarios([1,3]), reservasControlador.editar);
+
+
 export { router };

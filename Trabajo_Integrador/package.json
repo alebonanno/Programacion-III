@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "apicache": "^1.6.3",
+    "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "express-validator": "^7.3.0",
@@ -23,6 +25,7 @@
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "puppeteer": "^24.27.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }

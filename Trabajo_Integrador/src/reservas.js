@@ -11,6 +11,7 @@ import { router as v1notificacionRouter } from './v1/rutas/notificacionRuta.js'
 import { router as v1reservasRutas } from './v1/rutas/reservasRutas.js'
 import { router as v1AuthRouter } from './v1/rutas/authRutas.js';
 import { swaggerDocs } from './config/swagger.js';
+import reporteRoutes from './v1/rutas/reporteRoutes.js'
 // Instancia de express.
 const app = express()
 
@@ -41,9 +42,10 @@ app.use('/api/v1/servicios', v1ServiciosRutas);
 app.use('/api/v1/reservas', passport.authenticate( "jwt", { session:false }), v1reservasRutas);
 // Autenticación.
 app.use('/api/v1/auth', v1AuthRouter);
+//Descargar informe.
+app.use('/api/v1/reporte', reporteRoutes);
 // Conecta swagger antes de iniciar el servidor.
 swaggerDocs(app)
 
 app.use('/api/v1/notificaciones', v1notificacionRouter);
-
 export default app;

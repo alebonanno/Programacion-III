@@ -116,4 +116,34 @@ export default class ReservasControlador{
             });
         }
     }
+
+
+    editar = async (req, res) => {
+        try{
+            const { reserva_id } = req. params;
+            const datos = req.body;
+
+            const reservaActualizada = await this.reservasServicio.editarReserva(reserva_id, datos);
+
+            if (!reservaActualizada) {
+                return res.status(404).json({
+                    ok: false,
+                    mensaje: "Reserva no encontrada (controlador)"
+                });
+            }
+            
+            res.json({
+                ok: true,
+                mensaje: reservaActualizada
+            });
+
+        }catch (error){
+            console.error(error)
+            res.status(500).json({
+                ok: false,
+                mensaje: "Error al actualizar la reserva."
+            });
+        }
+    };
+    
 }
