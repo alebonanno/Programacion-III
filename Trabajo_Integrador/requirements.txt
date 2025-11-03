@@ -1,0 +1,17 @@
+apicache
+cors
+csv-writer
+dotenv
+express
+express-validator
+handlebars
+jsonwebtoken
+morgan
+mysql2
+nodemailer
+passport
+passport-jwt
+passport-local
+puppeteer
+swagger-jsdoc
+swagger-ui-express
