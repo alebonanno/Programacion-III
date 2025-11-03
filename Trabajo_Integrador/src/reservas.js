@@ -12,6 +12,9 @@ import { router as v1reservasRutas } from './v1/rutas/reservasRutas.js'
 import { router as v1AuthRouter } from './v1/rutas/authRutas.js';
 import { swaggerDocs } from './config/swagger.js';
 import reporteRoutes from './v1/rutas/reporteRoutes.js'
+import usuarioRoutes from './v1/rutas/usuariosRutas.js'
+import turnoRoutes from './v1/rutas/turnosRoutes.js';
+
 // Instancia de express.
 const app = express()
 
@@ -44,6 +47,12 @@ app.use('/api/v1/reservas', passport.authenticate( "jwt", { session:false }), v1
 app.use('/api/v1/auth', v1AuthRouter);
 //Descargar informe.
 app.use('/api/v1/reporte', reporteRoutes);
+// Usuarios CRUD => Dentro estan todos los metodos HTTP.
+app.use('/api/v1/usuarios', usuarioRoutes);
+// Turnos CRUD
+app.use('/api/v1/turnos', turnoRoutes);
+
+
 // Conecta swagger antes de iniciar el servidor.
 swaggerDocs(app)
 
