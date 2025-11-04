@@ -1,8 +1,9 @@
 import ReservasServicio from "../servicios/reservasServicios.js";
+import enviarNotificacion from "../servicios/notificacionServicio.js"
 
-export default class ReservasControlador{
+export default class ReservasControlador {
 
-    constructor(){
+    constructor() {
         // Crea una instancia del servicio de reservas 'ReservasServicio'.
         this.reservasServicio = new ReservasServicio();
     }
@@ -12,13 +13,13 @@ export default class ReservasControlador{
     // Si es exitoso => devuelve 'JSON' con nueva reserva y mensaje de exito.
     crear = async (req, res) => {
         try {
-            
+
             const {
                 fecha_reserva,
                 salon_id,
                 usuario_id,
                 turno_id,
-                foto_cumpleaniero, 
+                foto_cumpleaniero,
                 tematica,
                 importe_salon,
                 importe_total,
@@ -29,10 +30,10 @@ export default class ReservasControlador{
                 salon_id,
                 usuario_id,
                 turno_id,
-                foto_cumpleaniero, 
+                foto_cumpleaniero,
                 tematica,
                 importe_salon,
-                importe_total, 
+                importe_total,
                 servicios
             };
 
@@ -44,13 +45,13 @@ export default class ReservasControlador{
                     mensaje: 'Reserva no creada'
                 })
             }
-
+            
             res.status(201).json({
-                estado: true, 
+                estado: true,
                 mensaje: 'Reserva creada!',
                 salon: nuevaReserva
             });
-    
+
         } catch (error) {
             console.log('Error en POST /reservas/', error);
             // Devuelve error 500 si falla.
@@ -60,7 +61,7 @@ export default class ReservasControlador{
             });
         }
     }
-    
+
     // Llama al servicio para obtener todas la reserva activas.
     // Devuelve un 'JSON' con todas las reservas encontradas.
     buscarTodos = async (req, res) => {
@@ -68,10 +69,10 @@ export default class ReservasControlador{
             const reservas = await this.reservasServicio.buscarTodos();
 
             res.json({
-                estado: true, 
+                estado: true,
                 datos: reservas
             });
-    
+
         } catch (error) {
             console.log('Error en GET /reservas', error);
             // Devuelve error 500 si falla.
@@ -103,10 +104,10 @@ export default class ReservasControlador{
 
             // Si la encuentra responde con la 'reserva'.
             res.json({
-                estado: true, 
+                estado: true,
                 reserva: reserva
             });
-    
+
         } catch (error) {
             console.log('Error en GET /reservas/reservas_id', error);
             // Si algo falla da error 500.
@@ -119,8 +120,8 @@ export default class ReservasControlador{
 
 
     editar = async (req, res) => {
-        try{
-            const { reserva_id } = req. params;
+        try {
+            const { reserva_id } = req.params;
             const datos = req.body;
 
             const reservaActualizada = await this.reservasServicio.editarReserva(reserva_id, datos);
@@ -131,13 +132,13 @@ export default class ReservasControlador{
                     mensaje: "Reserva no encontrada (controlador)"
                 });
             }
-            
+
             res.json({
                 ok: true,
                 mensaje: reservaActualizada
             });
 
-        }catch (error){
+        } catch (error) {
             console.error(error)
             res.status(500).json({
                 ok: false,
@@ -145,5 +146,5 @@ export default class ReservasControlador{
             });
         }
     };
-    
+
 }

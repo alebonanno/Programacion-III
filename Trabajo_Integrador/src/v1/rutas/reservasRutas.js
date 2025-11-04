@@ -92,34 +92,42 @@ router.get('/', autorizarUsuarios([1,2,3]), reservasControlador.buscarTodos);
  *       content:
  *         application/json:
  *           schema:
- *            type: object
- *            properties:
- *              fecha_reserva:
- *                type: string
- *                format: date
- *                example: "2025-11-10"
- *              salon_id:
- *                type: integer
- *                example: 2
- *              usuario_id:
- *                type: integer
- *                example: 5
- *              turno_id:
- *                type: integer
- *                example: 1
- *              servicios:
- *                type: array
- *                items:
- *                  type: object
- *                  properties:
- *                    nombre:
- *                      type: string
- *                      example: "Decoración"
- *                    importe:
- *                      type: number
- *                      example: 150000
- * 
- *     response:
+ *             type: object
+ *             properties:
+ *               fecha_reserva:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-10-19"
+ *               salon_id:
+ *                 type: integer
+ *                 example: 1
+ *               usuario_id:
+ *                 type: integer
+ *                 example: 10
+ *               turno_id:
+ *                 type: integer
+ *                 example: 3
+ *               foto_cumpleaniero:
+ *                 type: string
+ *                 example: "foto_cumpleaniero"
+ *               tematica:
+ *                 type: string
+ *                 example: "Portugaltest22"
+ *               importe_salon:
+ *                 type: number
+ *                 example: 95000
+ *               servicios:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     servicio_id:
+ *                       type: integer
+ *                       example: 1
+ *                     importe:
+ *                       type: number
+ *                       example: 5000
+ *     responses:
  *       201:
  *         description: Reserva creada correctamente.
  *         content:
@@ -127,15 +135,60 @@ router.get('/', autorizarUsuarios([1,2,3]), reservasControlador.buscarTodos);
  *             schema:
  *               type: object
  *               properties:
- *                 ok:
- *                   type: booblean
+ *                 estado:
+ *                   type: boolean
  *                   example: true
- *                 reserva:
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Reserva creada!"
+ *                 salon:
  *                   type: object
- *       400: 
+ *                   properties:
+ *                     reserva_id:
+ *                       type: integer
+ *                       example: 32
+ *                     fecha_reserva:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-10-19T03:00:00.000Z"
+ *                     salon_id:
+ *                       type: integer
+ *                       example: 1
+ *                     usuario_id:
+ *                       type: integer
+ *                       example: 10
+ *                     turno_id:
+ *                       type: integer
+ *                       example: 3
+ *                     foto_cumpleaniero:
+ *                       type: string
+ *                       example: "foto_cumpleaniero"
+ *                     tematica:
+ *                       type: string
+ *                       example: "Portugaltest22"
+ *                     importe_salon:
+ *                       type: string
+ *                       example: "95000.00"
+ *                     importe_total:
+ *                       type: string
+ *                       example: "100000.00"
+ *                     activo:
+ *                       type: integer
+ *                       example: 1
+ *                     creado:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-11-04T17:08:04.000Z"
+ *                     modificado:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-11-04T17:08:04.000Z"
+ *       400:
  *         description: Error en los datos enviados.
- *       401: 
+ *       401:
  *         description: No autorizado.
+ *       500:
+ *         description: Error interno del servidor.
  */
 // autorizarUsuarios([1,3]) => Admin y cliente pueden crear una reserva.
 router.post('/', autorizarUsuarios([1,3]), 
@@ -161,19 +214,19 @@ router.post('/', autorizarUsuarios([1,3]),
 
 /**
  * @swagger
- * /api/v1/reservas/{reserva_id}:
- *   patch:
- *     summary: Editar una reserva existente (solo los campos enviados en JSON)
+ * /api/v1/reservas/{id}:
+ *   put:
+ *     summary: Actualizar una reserva existente (Buscar reserva, copiar el json y pasar aqui).
  *     tags: [Reservas]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: reserva_id
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID de la reserva a actualizar.
+ *         description: ID de la reserva a actualizar
  *     requestBody:
  *       required: true
  *       content:
@@ -183,29 +236,29 @@ router.post('/', autorizarUsuarios([1,3]),
  *             properties:
  *               fecha_reserva:
  *                 type: string
- *                 format: date
- *                 example: "2025-11-20"
+ *                 format: date-time
+ *                 example: "2025-10-19T03:00:00.000Z"
  *               salon_id:
  *                 type: integer
- *                 example: 2
+ *                 example: 1
+ *               usuario_id:
+ *                 type: integer
+ *                 example: 10
  *               turno_id:
  *                 type: integer
- *                 example: 1
+ *                 example: 3
  *               foto_cumpleaniero:
  *                 type: string
- *                 format: uri
- *                 nullable: true
- *                 example: null
+ *                 example: "foto_cumpleaniero"
  *               tematica:
  *                 type: string
- *                 example: "Plim plim"
+ *                 example: "Portugaltest22"
  *               importe_salon:
- *                 type: number
- *                 nullable: true
- *                 example: 100000
+ *                 type: string
+ *                 example: "95000.00"
  *               importe_total:
- *                 type: number
- *                 example: 200000
+ *                 type: string
+ *                 example: "100000.00"
  *               activo:
  *                 type: integer
  *                 example: 1
@@ -217,17 +270,63 @@ router.post('/', autorizarUsuarios([1,3]),
  *             schema:
  *               type: object
  *               properties:
- *                 ok:
+ *                 estado:
  *                   type: boolean
  *                   example: true
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Reserva actualizada!"
  *                 reserva:
  *                   type: object
+ *                   properties:
+ *                     reserva_id:
+ *                       type: integer
+ *                       example: 32
+ *                     fecha_reserva:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-10-19T03:00:00.000Z"
+ *                     salon_id:
+ *                       type: integer
+ *                       example: 1
+ *                     usuario_id:
+ *                       type: integer
+ *                       example: 10
+ *                     turno_id:
+ *                       type: integer
+ *                       example: 3
+ *                     foto_cumpleaniero:
+ *                       type: string
+ *                       example: "foto_cumpleaniero"
+ *                     tematica:
+ *                       type: string
+ *                       example: "Portugaltest22"
+ *                     importe_salon:
+ *                       type: string
+ *                       example: "95000.00"
+ *                     importe_total:
+ *                       type: string
+ *                       example: "100000.00"
+ *                     activo:
+ *                       type: integer
+ *                       example: 1
+ *                     creado:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-11-04T17:08:04.000Z"
+ *                     modificado:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-11-04T17:08:04.000Z"
+ *       400:
+ *         description: Error en los datos enviados.
+ *       401:
+ *         description: No autorizado.
  *       404:
  *         description: Reserva no encontrada.
  *       500:
- *         description: Error interno.
+ *         description: Error interno del servidor.
  */
-
 // Ruta para editar las reservas, solo admnin.
 router.patch('/:reserva_id', autorizarUsuarios([1]), reservasControlador.editar);
 
