@@ -14,6 +14,7 @@ import { swaggerDocs } from './config/swagger.js';
 import reporteRoutes from './v1/rutas/reporteRoutes.js'
 import usuarioRoutes from './v1/rutas/usuariosRutas.js'
 import turnoRoutes from './v1/rutas/turnosRoutes.js';
+import { router as adminRouters } from './v1/rutas/adminRouters.js'
 
 // Instancia de express.
 const app = express()
@@ -51,6 +52,8 @@ app.use('/api/v1/reporte', reporteRoutes);
 app.use('/api/v1/usuarios', usuarioRoutes);
 // Turnos CRUD
 app.use('/api/v1/turnos', turnoRoutes);
+// SOC
+app.use('/api/v1/logs', adminRouters);
 
 
 // Conecta swagger antes de iniciar el servidor.
