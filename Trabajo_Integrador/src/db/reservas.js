@@ -2,9 +2,9 @@
 import { conexion } from "./conexion.js";
 
 export default class Reservas {
-    
+
     // Devuelve todas las reservas activas.
-    buscarTodos= async() => {
+    buscarTodos = async () => {
         const sql = 'SELECT * FROM reservas WHERE activo = 1';
         const [reservas] = await conexion.execute(sql);
         return reservas;
@@ -14,7 +14,7 @@ export default class Reservas {
     buscarPorId = async (reserva_id) => {
         const sql = 'SELECT * FROM reservas WHERE activo = 1 AND reserva_id = ?';
         const [reserva] = await conexion.execute(sql, [reserva_id]);
-        if (reserva.length === 0){
+        if (reserva.length === 0) {
             return null;
         };
         return reserva[0];
@@ -25,14 +25,14 @@ export default class Reservas {
     crear = async (reserva) => {
         const {
             fecha_reserva,
-                salon_id,
-                usuario_id,
-                turno_id,
-                foto_cumpleaniero, 
-                tematica,
-                importe_salon,
-                importe_total 
-            } = reserva;
+            salon_id,
+            usuario_id,
+            turno_id,
+            foto_cumpleaniero,
+            tematica,
+            importe_salon,
+            importe_total
+        } = reserva;
 
         const sql = `
         INSERT INTO reservas
@@ -40,7 +40,7 @@ export default class Reservas {
         VALUES (?,?,?,?,?,?,?,?)
         `;
 
-        const [result] = await conexion.execute(sql, 
+        const [result] = await conexion.execute(sql,
             [fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon, importe_total]
         );
 
@@ -53,9 +53,9 @@ export default class Reservas {
     };
 
     // Recupera información especifica de una reserva para mostrarla en una notificación.
-    // Devuevle fecha de la reserva, nombre de salón, y orden del turno.
+    // Devuelve fecha de la reserva, nombre de salón, y orden del turno.
     // Realiza 'JOIN' con las tablas 'salones' y 'turnos'.
-    datosParaNotificar = async(reserva_id) => {
+    datosParaNotificar = async (reserva_id) => {
         const sql = `SELECT r.fecha_reserva as fecha, s.titulo as salon, t.orden as turno
             FROM reservas as r
             INNER JOIN  salones as s on s.salon_id = r.salon_id 
@@ -74,7 +74,7 @@ export default class Reservas {
         return reserva[0];
     };
 
-     actualizarReserva = async (reserva_id, datos) => {
+    actualizarReserva = async (reserva_id, datos) => {
         const {
             fecha_reserva,
             salon_id,
@@ -109,9 +109,9 @@ export default class Reservas {
         ]);
 
         // Verifica si se actualizo algún registro.
-        if(result.affectedRows === 0){
+        if (result.affectedRows === 0) {
             return ({
-                ok:false, 
+                ok: false,
                 error: 'No se encontro la reserva o está inactiva.'
             });
         };
@@ -145,5 +145,22 @@ export default class Reservas {
         console.log("Datos encontrados: ", rows);
         return rows; // devuelve un array, aunque esté vacío
     };
+
+
+    // Borrado lógico.
+    borrarReserva = async (reserva_id) => {
+        const sql = `
+            UPDATE reservas
+            SET activo = 0,
+                modificado = NOW()
+            WHERE reserva_id = ?;
+        `;
+        await conexion.execute(sql, [reserva_id]);
+
+        // Retorna la reserva actualizada
+        const [result] = await conexion.execute(`SELECT * FROM reservas WHERE reserva_id = ?`, [reserva_id]);
+        return result[0];
+    };
+
 
 };

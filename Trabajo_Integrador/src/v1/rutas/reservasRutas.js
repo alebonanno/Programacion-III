@@ -50,7 +50,10 @@ const router = express.Router();
  *        description: Reserva no encontrada.
 */
 // autorizarUsuarios([1,2,3]) => Admin, empleado y cliente pueden buscar por ID una reserva.
-router.get('/:reserva_id', autorizarUsuarios([1,2]), reservasControlador.buscarPorId);
+router.get('/:reserva_id', 
+    autorizarUsuarios([1,2, 3]), 
+    reservasControlador.buscarPorId
+);
 
 
 /**
@@ -328,7 +331,81 @@ router.post('/', autorizarUsuarios([1,3]),
  *         description: Error interno del servidor.
  */
 // Ruta para editar las reservas, solo admnin.
-router.patch('/:reserva_id', autorizarUsuarios([1]), reservasControlador.editar);
+router.patch('/:reserva_id', autorizarUsuarios([1, 3]), reservasControlador.editar);
+
+
+/**
+ * @swagger
+ * /api/v1/reservas/{reserva_id}:
+ *   delete:
+ *     summary: Borrado lógico de una reserva
+ *     description: Cambia el campo 'activo' de la reserva a 0.
+ *     tags: [Reservas]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: reserva_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la reserva a eliminar
+ *     responses:
+ *       200:
+ *         description: Reserva eliminada correctamente (borrado lógico)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Reserva eliminada correctamente (borrado lógico)."
+ *                 reserva:
+ *                   type: object
+ *                   properties:
+ *                     reserva_id:
+ *                       type: integer
+ *                       example: 1
+ *                     activo:
+ *                       type: boolean
+ *                       example: 0
+ *                     modificado:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-11-04T01:50:00Z"
+ *       404:
+ *         description: Reserva no encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Reserva no encontrada."
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Error al borrar la reserva."
+ */
+// Borrado lógico.
+router.delete('/:reserva_id', reservasControlador.borrarReserva);
 
 
 export { router };

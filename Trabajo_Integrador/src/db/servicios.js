@@ -37,7 +37,7 @@ export default class Servicios{
             `;
 
             const [results] = await conexion.query(sql, [
-                descripcion, importe
+                descripcion, importe, servicio_id
             ]);
             // Debug para ver affectedRows.
             console.log(results);

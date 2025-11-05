@@ -61,7 +61,7 @@ const turnosController = new TurnosController();
  */
 router.get("/",
   passport.authenticate("jwt", { session: false }),
-  autorizarUsuario([1]),
+  autorizarUsuario([1, 3]),
   turnosController.obtenerTurnos
 );
 
@@ -104,7 +104,7 @@ router.get("/",
  */
 router.post("/",
   passport.authenticate("jwt", { session: false }),
-  autorizarUsuario([1]),
+  autorizarUsuario([1, 3]),
   turnosController.crearTurno
 );
 
@@ -147,7 +147,7 @@ router.post("/",
  */
 router.put("/:id",
   passport.authenticate("jwt", { session: false }),
-  autorizarUsuario([1]),
+  autorizarUsuario([1, 3]),
   turnosController.editarTurno
 );
 
@@ -177,8 +177,75 @@ router.put("/:id",
  */
 router.delete("/:id",
   passport.authenticate("jwt", { session: false }),
-  autorizarUsuario([1]),
+  autorizarUsuario([1, 3]),
   turnosController.borrarTurno
+);
+
+
+/** 
+ * @swagger
+ * /api/v1/turnos/{turno_id}:
+ *   get:
+ *     summary: Buscar un turno por ID.
+ *     tags: [Turnos]
+ *     security: 
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: turno_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del turno.
+ *
+ *     responses:
+ *      200:
+ *       description: Turno encontrado.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ok: 
+ *                 type: boolean
+ *                 example: true
+ *               turno:
+ *                 type: object
+ *                 description: Devuelve todos los campos del turno tal como están en la base de datos.
+ *      404:
+ *        description: Turno no encontrado.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                ok:
+ *                  type: boolean
+ *                  example: false
+ *                mensaje:
+ *                  type: string
+ *                  example: "Turno no encontrado o inactivo."
+ *      500:
+ *        description: Error interno del servidor.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                ok:
+ *                  type: boolean
+ *                  example: false
+ *                mensaje:
+ *                  type: string
+ *                  example: "Error al buscar el turno."
+*/
+
+
+// GET /turnos/:turno_id → Buscar un turno por ID
+router.get('/:turno_id',
+  passport.authenticate("jwt", { session: false }),
+  autorizarUsuario([1,2, 3]),
+  turnosController.buscarTurnoPorId
 );
 
 

@@ -51,7 +51,7 @@ export default class TurnosController {
         try {
             const turno_id = req.params.id;
             const turnoActualizado = req.body;
-            const resultado = await this.turnosService.editarTurno(turno_id, turnoActualizado);
+            const resultado = await this.turnosService.buscarTurnoPorId(turno_id, turnoActualizado);
 
             res.status(200).json({
                 ok: true,
@@ -83,4 +83,37 @@ export default class TurnosController {
             });
         }
     }
+
+    // Buscar por ID el turno.
+    buscarTurnoPorId = async (req, res) => {
+        try {
+            // Extrae el 'ID' de los parámetros.
+            const { turno_id } = req.params;
+
+            // Llama al servicio de base de datos.
+            const turno = await this.turnosService.buscarPorId(turno_id);
+
+            if (!turno) {
+                // Si no se encuentra, responde 404
+                return res.status(404).json({
+                    ok: false,
+                    mensaje: 'Turno no encontrado o inactivo.'
+                });
+            }
+
+            // Respuesta exitosa
+            res.status(200).json({
+                ok: true,
+                turno
+            });
+
+        } catch (error) {
+            console.log("Error en GET /turnos/:turno_id", error);
+            // Respuesta de error general
+            res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar el turno.'
+            });
+        }
+    };
 }

@@ -45,7 +45,7 @@ export default class ReservasControlador {
                     mensaje: 'Reserva no creada'
                 })
             }
-            
+
             res.status(201).json({
                 estado: true,
                 mensaje: 'Reserva creada!',
@@ -143,6 +143,35 @@ export default class ReservasControlador {
             res.status(500).json({
                 ok: false,
                 mensaje: "Error al actualizar la reserva."
+            });
+        }
+    };
+
+    // Borrado lógico de una reserva.
+    borrarReserva = async (req, res) => {
+        try {
+            const { reserva_id } = req.params;
+
+            const reservaActualizada = await this.reservasServicio.borrarReserva(reserva_id);
+
+            if (!reservaActualizada) {
+                return res.status(404).json({
+                    ok: false,
+                    mensaje: "Reserva no encontrada."
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                mensaje: "Reserva eliminada correctamente (borrado lógico).",
+                reserva: reservaActualizada
+            });
+
+        } catch (error) {
+            console.error("Error al borrar reserva (controlador)", error);
+            res.status(500).json({
+                ok: false,
+                mensaje: "Error al borrar la reserva."
             });
         }
     };

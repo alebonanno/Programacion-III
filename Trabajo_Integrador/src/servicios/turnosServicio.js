@@ -21,4 +21,11 @@ export default class TurnosService {
     obtenerTurnos = async () => {
         return await this.turnos.buscarTodosTurnos();
     }
+
+    // Buscar turno por ID
+    buscarPorId = async (id) => {
+        // Usa el metodo 'buscarPorId()' que está en 'Turnos' de 'db'.
+        return await this.turnos.buscarTurnoPorId(id);
+    };
+
 }

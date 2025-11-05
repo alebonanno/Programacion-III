@@ -7,31 +7,31 @@ export default class ServiciosControlador {
     }
 
     obtenerTodos = async (req, res) => {
-        try{
-            
+        try {
+
             const servicios = await this.servicio.obtenerTodos();
-            
+
             res.status(200).json({
-                'ok': true, 
-                'servicios':servicios
+                'ok': true,
+                'servicios': servicios
             });
 
-        }catch (error){
+        } catch (error) {
             console.log('Error en GET /salones', error);
             res.status(500).json({
-                'ok': false, 
+                'ok': false,
                 mensaje: 'Error al obtener servicios (controlador).'
             });
         }
     };
 
     buscarPorId = async (req, res) => {
-        try{
+        try {
             // Extrae el 'ID' de los parámetros de la URL.
             const { servicio_id } = req.params;
             const servicio = await this.servicio.buscarPorId(servicio_id);
 
-            if (!servicio){
+            if (!servicio) {
                 // Si en 'db' es null o algun error, responde 404 aqui en controlador.
                 // Esto se muestra en 'bruno'.
                 return res.status(404).json({
@@ -39,30 +39,30 @@ export default class ServiciosControlador {
                     mensaje: 'Servicio no encontrado.'
                 });
             }
-            
+
             // Respuesta exitosa.
             res.status(200).json({
-                    'ok': true, 
-                    'servicio':servicio
+                'ok': true,
+                'servicio': servicio
             });
-        }catch (error){
+        } catch (error) {
             console.log("Error en GET /servicios(:servicio_id: ", error);
             res.status(404).json({
-                    'ok': false, 
-                    mensaje: 'Servicio no encontrado.'
+                'ok': false,
+                mensaje: 'Servicio no encontrado.'
             });
         }
     };
 
     // POST /servicios, crear servicio.
-    crearServicio = async (req,res) => {
-        try{
+    crearServicio = async (req, res) => {
+        try {
             const nuevoServicio = await this.servicio.crearServicio(req.body);
             res.status(201).json({
-                'ok':true,
+                'ok': true,
                 'servicio': nuevoServicio
             });
-        }catch(error){
+        } catch (error) {
             res.status(500).json({
                 'ok': false,
                 'message': 'Error al crear el servicio'
@@ -70,10 +70,10 @@ export default class ServiciosControlador {
         }
     };
 
-     editarServicioPorId = async (req, res) => {
-        try{
+    editarServicioPorId = async (req, res) => {
+        try {
             const { servicio_id } = req.params;
-            const servicioActualizado = await this.servicio.editarServicioPorId(servicio_id, req.body)
+            const servicioActualizado = await this.servicio.editarPorId(servicio_id, req.body)
 
             if (!servicioActualizado) {
                 return res.status(404).json({
@@ -89,14 +89,14 @@ export default class ServiciosControlador {
 
             // Return exitoso.
             return res.status(200).json({
-                ok:true,
-                mensaje:'Servicio actualizado correctamente.'
+                ok: true,
+                mensaje: 'Servicio actualizado correctamente.'
             });
-            
-        }catch (error){
+
+        } catch (error) {
             console.log('Error en editarServicioPoId(Controlador): ', error);
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 error: 'Ocurrio un error al intentar actualizar el servicio.'
             });
         };
@@ -104,7 +104,7 @@ export default class ServiciosControlador {
 
 
     eliminarServicioPorId = async (req, res) => {
-        try{
+        try {
             const { servicio_id } = req.params;
             const eliminado = await this.servicio.eliminarPorId(servicio_id)
 
@@ -122,14 +122,14 @@ export default class ServiciosControlador {
 
             // Return exitoso.
             return res.status(200).json({
-                ok:true,
-                mensaje:'Servicio eliminado correctamente.'
+                ok: true,
+                mensaje: 'Servicio eliminado correctamente.'
             });
-            
-        }catch (error){
+
+        } catch (error) {
             console.log('Error en editarServicioPoId(Controlador): ', error);
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 error: 'Ocurrio un error al intentar eliminar el servicio.'
             });
         };

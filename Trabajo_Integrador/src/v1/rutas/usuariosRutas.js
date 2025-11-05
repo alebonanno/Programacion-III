@@ -87,7 +87,7 @@ const router = express.Router();
 // Obtener todos los usuarios
 router.get('/', 
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1]),
+    autorizarUsuario([1, 3]),
     usuarioController.obtenerUsuarios
 );
 
@@ -191,7 +191,7 @@ router.get('/',
 // Crear usuario.
 router.post('/', 
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1]),
+    autorizarUsuario([1, 3]),
     usuarioController.crearUsuario
 );
 
@@ -302,7 +302,7 @@ router.post('/',
 // Editar usuario.
 router.put('/:id', 
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1]),
+    autorizarUsuario([1, 3]),
     usuarioController.editarUsuario
 );
 
@@ -362,8 +362,93 @@ router.put('/:id',
 // Borrado lógico de usuario.
 router.delete('/id', 
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1]),
+    autorizarUsuario([1, 3]),
     usuarioController.borrarUsuario
 )
     
+
+/**
+ * @swagger
+ * /api/v1/usuarios/{usuario_id}:
+ *   get:
+ *     summary: Obtener un usuario por su ID
+ *     description: Retorna los datos de un usuario activo por su ID.
+ *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: usuario_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario a buscar
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 usuario:
+ *                   type: object
+ *                   properties:
+ *                     usuario_id:
+ *                       type: integer
+ *                       example: 1
+ *                     nombre:
+ *                       type: string
+ *                       example: "Juan Perez"
+ *                     email:
+ *                       type: string
+ *                       example: "juan@example.com"
+ *                     activo:
+ *                       type: boolean
+ *                       example: true
+ *                     creado:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-11-04T01:00:00Z"
+ *                     modificado:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-11-04T01:30:00Z"
+ *       404:
+ *         description: Usuario no encontrado o inactivo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Usuario no encontrado o inactivo."
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Error al buscar el usuario."
+ */
+router.get("/:usuario_id",
+    passport.authenticate('jwt', { session: false }),
+    autorizarUsuario([1,2, 3]),
+    usuarioController.buscarUsuarioPorId
+);
+
+
 export default router;

@@ -81,8 +81,37 @@ class UsuarioController {
             });
         } catch (error) {
             console.error("Error al desactivar usuario (controlador)", error);
-            res.status(500).json({ 
-                mensaje: "Error al desactivar usuario." 
+            res.status(500).json({
+                mensaje: "Error al desactivar usuario."
+            });
+        }
+    };
+
+
+    // Buscar usuario por ID.
+    buscarUsuarioPorId = async (req, res) => {
+        try {
+            const { usuario_id } = req.params;
+
+            const usuario = await this.usuariosService.buscarPorId(usuario_id);
+
+            if (!usuario) {
+                return res.status(404).json({
+                    ok: false,
+                    mensaje: "Usuario no encontrado o inactivo."
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                usuario
+            });
+
+        } catch (error) {
+            console.error("Error en 'buscarUsuarioPorId' (controlador)", error);
+            res.status(500).json({
+                ok: false,
+                mensaje: "Error al buscar el usuario."
             });
         }
     };

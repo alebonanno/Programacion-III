@@ -66,7 +66,10 @@ const router = express.Router();
 // Solo el admin y los empelados pueden hacer BREAD de los salones.
 // Usa el controlador de salones, y el metodo 'buscar todos()'.
 // cache => Por 5 minutos los salones quedaran cacheados en la memoria del server.
-router.get('/', cache('5 minutos'), autorizarUsuarios([1,2,3]), salonesControlador.buscarTodos);
+router.get('/', cache('5 minutos'), 
+autorizarUsuarios([1,2,3]), 
+salonesControlador.buscarTodos
+);
 
 
 /** 
@@ -120,7 +123,11 @@ router.get('/', cache('5 minutos'), autorizarUsuarios([1,2,3]), salonesControlad
  *        description: Error interno del servidor.
 */
 // Busqueda por 'ID' de salon.
-router.get('/:salon_id', cache('5 minutos'), autorizarUsuarios([1,2]), salonesControlador.buscarPorId);
+router.get('/:salon_id', 
+    cache('5 minutos'), 
+    autorizarUsuarios([1,2, 3]), 
+    salonesControlador.buscarPorId
+);
 
 
 
@@ -164,7 +171,7 @@ router.get('/:salon_id', cache('5 minutos'), autorizarUsuarios([1,2]), salonesCo
  *         description: Error interno del servidor.
  */
 // Busca por 'ID' para editar el salón.
-router.put('/:salon_id', autorizarUsuarios([1,2]), salonesControlador.editarSalonPorId);
+router.put('/:salon_id', autorizarUsuarios([1,2, 3]), salonesControlador.editarSalonPorId);
 
 
 
@@ -193,7 +200,7 @@ router.put('/:salon_id', autorizarUsuarios([1,2]), salonesControlador.editarSalo
  *         description: Error interno del servidor.
  */
 // Busca por 'ID' para hacer el 'borrado logico'.
-router.delete('/:salon_id', autorizarUsuarios([1,2]), salonesControlador.eliminarSalonPorId);
+router.delete('/:salon_id', autorizarUsuarios([1,2, 3]), salonesControlador.eliminarSalonPorId);
 
 
 /**
@@ -257,7 +264,7 @@ router.delete('/:salon_id', autorizarUsuarios([1,2]), salonesControlador.elimina
 
 
 // Crea un salón.
-router.post('/', autorizarUsuarios([1,2]), 
+router.post('/', autorizarUsuarios([1,2, 3]), 
     // Uso de express validator.
     // notEmpty() => Verifica que el campo no este vacio.
     // isInt() => Verifica que el campo sea un entero positivo, mayor o igual a 1.

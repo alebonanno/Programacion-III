@@ -34,13 +34,13 @@ export default class ReservasServicios {
             importe_salon,
             servicios } = reserva;
 
-            // Calcular el importe total => (salon + servicios).
-            // 'importe_total' en vez de estar en 'crear' se usa aqui para calcular.
-            const importeSalon = parseFloat(importe_salon) || 0;
-            const importeServicios = (servicios || []).reduce((total, servicio) => {
-                return total + (parseFloat(servicio.importe) || 0);
-            }, 0);
-            const importe_total = importeSalon + importeServicios;
+        // Calcular el importe total => (salon + servicios).
+        // 'importe_total' en vez de estar en 'crear' se usa aqui para calcular.
+        const importeSalon = parseFloat(importe_salon) || 0;
+        const importeServicios = (servicios || []).reduce((total, servicio) => {
+            return total + (parseFloat(servicio.importe) || 0);
+        }, 0);
+        const importe_total = importeSalon + importeServicios;
 
 
         // Se arma la nueva reserva con el total calculado.
@@ -75,4 +75,26 @@ export default class ReservasServicios {
         // Retorno de reserva creada.
         return this.reserva.buscarPorId(result.reserva_id);
     };
+
+    borrarReserva = async (reserva_id) => {
+        // Opcional: validar que la reserva exista antes de borrar
+        const reserva = await this.reserva.borrarReserva(reserva_id);
+        if (!reserva) {
+            return null;
+        }
+        return await this.reserva.borrarReserva(reserva_id);
+    };
+
+
+    // Editar una reserva.
+    actualizarReserva = async (reserva_id, datos) => {
+        try {
+            const resultado = await this.reserva.actualizarReserva(reserva_id, datos);
+            return resultado;
+        } catch (error) {
+            console.error("Error en actualizarReserva (servicio):", error);
+            throw error;
+        }
+    };
+
 }
