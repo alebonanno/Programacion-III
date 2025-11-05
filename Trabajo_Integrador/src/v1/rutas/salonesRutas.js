@@ -1,6 +1,6 @@
 import express from 'express';
 import SalonesControlador from '../../controladores/salonesControlador.js';
-import validarCampos from '../../controladores/salonesControlador.js';
+import { validarCampos } from '../../middlewares/validarCampos.js'
 import { cache } from '../../middlewares/apicache.js'
 import { check } from 'express-validator';
 import autorizarUsuarios from "../../middlewares/autorizarUsuario.js"
@@ -135,17 +135,19 @@ router.get('/:salon_id',
  * @swagger
  * /api/v1/salones/{salon_id}:
  *   put:
- *     summary: Editar un salón.
+ *     summary: Editar un salón existente por ID.
+ *     description: Actualiza los datos de un salón existente. Solo accesible para administradores o empleados autorizados.
  *     tags: [Salones]
- *     security: 
+ *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: salon_id
  *         required: true
+ *         description: ID del salón a actualizar.
  *         schema:
  *           type: integer
- *         description: ID del salón a editar.
+ *           example: 12
  *     requestBody:
  *       required: true
  *       content:
@@ -155,20 +157,111 @@ router.get('/:salon_id',
  *             properties:
  *               titulo:
  *                 type: string
+ *                 description: Nuevo nombre o título del salón.
+ *                 example: "Salón principal nuevo 22"
  *               direccion:
  *                 type: string
+ *                 description: Nueva dirección del salón.
+ *                 example: "Calle falsa 4561"
+ *               latitud:
+ *                 type: number
+ *                 format: float
+ *                 nullable: true
+ *                 description: Coordenada de latitud (puede ser null).
+ *                 example: null
+ *               longitud:
+ *                 type: number
+ *                 format: float
+ *                 nullable: true
+ *                 description: Coordenada de longitud (puede ser null).
+ *                 example: null
  *               capacidad:
  *                 type: integer
+ *                 description: Capacidad máxima de personas.
+ *                 example: 501
  *               importe:
  *                 type: number
- *     
+ *                 format: float
+ *                 description: Precio base o costo de alquiler.
+ *                 example: 2000.00
+ *               activo:
+ *                 type: integer
+ *                 description: Indica si el salón está activo (1) o inactivo (0).
+ *                 example: 1
+ *           example:
+ *             titulo: "Salón principal nuevo 22"
+ *             direccion: "Calle falsa 4561"
+ *             latitud: null
+ *             longitud: null
+ *             capacidad: 501
+ *             importe: "2000.00"
+ *             activo: 1
  *     responses:
  *       200:
  *         description: Salón actualizado correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Salón actualizado correctamente."
+ *       400:
+ *         description: Datos inválidos o campos faltantes.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Faltan datos obligatorios o formato inválido."
  *       404:
- *         description: Salón no encontrado.
+ *         description: Salón no encontrado o inactivo.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "No se encontró el salón o está inactivo."
+ *       401:
+ *         description: Token no proporcionado o usuario no autorizado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "No autorizado."
  *       500:
  *         description: Error interno del servidor.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Ocurrió un error al intentar actualizar el salón."
  */
 // Busca por 'ID' para editar el salón.
 router.put('/:salon_id', autorizarUsuarios([1,2, 3]), salonesControlador.editarSalonPorId);
@@ -207,36 +300,41 @@ router.delete('/:salon_id', autorizarUsuarios([1,2, 3]), salonesControlador.elim
  * @swagger
  * /api/v1/salones:
  *   post:
- *     summary: Crear un nuevo salón.
+ *     summary: Crea un nuevo salón.
+ *     description: Permite registrar un nuevo salón en el sistema. Solo accesible para administradores o empleados autorizados.
  *     tags: [Salones]
- *     security: 
+ *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *            type: object
- *            required:
- *              - titulo
- *              - direccion
- *              - capacidad
- *              - importe
- *            properties:
- *              titulo:
- *                type: string
- *                example: "Salón principal nuevo"
- *              direccion:
- *                type: string
- *                example: "Calle falsa 456"
- *              capacidad:
- *                type: integer
- *                example: 50
- *              importe:
- *                type: number
- *                example: 2000
- * 
- *     response:
+ *             type: object
+ *             required:
+ *               - titulo
+ *               - direccion
+ *               - capacidad
+ *               - importe
+ *             properties:
+ *               titulo:
+ *                 type: string
+ *                 description: Nombre o título del salón.
+ *                 example: "Salón Principal"
+ *               direccion:
+ *                 type: string
+ *                 description: Dirección física del salón.
+ *                 example: "Calle Falsa 456"
+ *               capacidad:
+ *                 type: integer
+ *                 description: Capacidad máxima de personas que puede albergar el salón.
+ *                 example: 50
+ *               importe:
+ *                 type: number
+ *                 format: float
+ *                 description: Precio base de alquiler del salón.
+ *                 example: 2000.00
+ *     responses:
  *       201:
  *         description: Salón creado correctamente.
  *         content:
@@ -244,25 +342,55 @@ router.delete('/:salon_id', autorizarUsuarios([1,2, 3]), salonesControlador.elim
  *             schema:
  *               type: object
  *               properties:
- *                 estado:
- *                   type: booblean
+ *                 ok:
+ *                   type: boolean
  *                   example: true
- *                 datos:
- *                   type: object
- *                   properties:
- *                     salon_id:
- *                       type: integer
- *                       example: 1
- *                     titulo:
- *                       type: string
- *                       example: "Salón principal nuevo"
- *       400: 
- *         description: Error de validación.
- *       500: 
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Salón creado correctamente."
+ *                 salon_id:
+ *                   type: integer
+ *                   example: 12
+ *       400:
+ *         description: Datos inválidos o campos obligatorios faltantes.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Faltan datos obligatorios."
+ *       401:
+ *         description: Token no proporcionado o inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "No autorizado."
+ *       500:
  *         description: Error interno del servidor.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Error interno al crear el salón."
  */
-
-
 // Crea un salón.
 router.post('/', autorizarUsuarios([1,2, 3]), 
     // Uso de express validator.
@@ -281,6 +409,7 @@ router.post('/', autorizarUsuarios([1,2, 3]),
         validarCampos
     ],
 
-    salonesControlador.crearSalon);
+    salonesControlador.crearSalon
+);
 
 export { router };
