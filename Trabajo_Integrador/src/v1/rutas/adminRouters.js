@@ -62,7 +62,7 @@ import autorizarUsuarios from "../../middlewares/autorizarUsuario.js"
 // Ruta de admin para ver actividad por IP
 router.get('/',
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuarios([1, 3]),
+    autorizarUsuarios([1]),
     getLogStats
 );
 

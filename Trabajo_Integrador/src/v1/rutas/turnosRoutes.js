@@ -61,7 +61,7 @@ const turnosController = new TurnosController();
  */
 router.get("/",
   passport.authenticate("jwt", { session: false }),
-  autorizarUsuario([1, 3]),
+  autorizarUsuario([1,2,3]),
   turnosController.obtenerTurnos
 );
 
@@ -104,7 +104,7 @@ router.get("/",
  */
 router.post("/",
   passport.authenticate("jwt", { session: false }),
-  autorizarUsuario([1, 3]),
+  autorizarUsuario([1, 2]),
   turnosController.crearTurno
 );
 
@@ -147,7 +147,7 @@ router.post("/",
  */
 router.put("/:id",
   passport.authenticate("jwt", { session: false }),
-  autorizarUsuario([1, 3]),
+  autorizarUsuario([1, 2]),
   turnosController.editarTurno
 );
 
@@ -177,7 +177,7 @@ router.put("/:id",
  */
 router.delete("/:id",
   passport.authenticate("jwt", { session: false }),
-  autorizarUsuario([1, 3]),
+  autorizarUsuario([1, 2]),
   turnosController.borrarTurno
 );
 
@@ -244,7 +244,7 @@ router.delete("/:id",
 // GET /turnos/:turno_id → Buscar un turno por ID
 router.get('/:turno_id',
   passport.authenticate("jwt", { session: false }),
-  autorizarUsuario([1,2, 3]),
+  autorizarUsuario([1,2]),
   turnosController.buscarTurnoPorId
 );
 

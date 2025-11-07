@@ -125,7 +125,7 @@ salonesControlador.buscarTodos
 // Busqueda por 'ID' de salon.
 router.get('/:salon_id', 
     cache('5 minutos'), 
-    autorizarUsuarios([1,2, 3]), 
+    autorizarUsuarios([1,2]), 
     salonesControlador.buscarPorId
 );
 
@@ -264,7 +264,7 @@ router.get('/:salon_id',
  *                   example: "Ocurrió un error al intentar actualizar el salón."
  */
 // Busca por 'ID' para editar el salón.
-router.put('/:salon_id', autorizarUsuarios([1,2, 3]), salonesControlador.editarSalonPorId);
+router.put('/:salon_id', autorizarUsuarios([1,2]), salonesControlador.editarSalonPorId);
 
 
 
@@ -293,7 +293,7 @@ router.put('/:salon_id', autorizarUsuarios([1,2, 3]), salonesControlador.editarS
  *         description: Error interno del servidor.
  */
 // Busca por 'ID' para hacer el 'borrado logico'.
-router.delete('/:salon_id', autorizarUsuarios([1,2, 3]), salonesControlador.eliminarSalonPorId);
+router.delete('/:salon_id', autorizarUsuarios([1,2]), salonesControlador.eliminarSalonPorId);
 
 
 /**
@@ -392,7 +392,7 @@ router.delete('/:salon_id', autorizarUsuarios([1,2, 3]), salonesControlador.elim
  *                   example: "Error interno al crear el salón."
  */
 // Crea un salón.
-router.post('/', autorizarUsuarios([1,2, 3]), 
+router.post('/', autorizarUsuarios([1,2]), 
     // Uso de express validator.
     // notEmpty() => Verifica que el campo no este vacio.
     // isInt() => Verifica que el campo sea un entero positivo, mayor o igual a 1.

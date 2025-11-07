@@ -116,7 +116,7 @@ router.get('/',
 router.get('/:servicio_id', 
     cache('5 minutos'),
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1,2, 3]),
+    autorizarUsuario([1,2]),
     serviciosControlador.buscarPorId
 );
 
@@ -163,7 +163,7 @@ router.get('/:servicio_id',
 // Editar un servicio.
 router.put('/:servicio_id',
     passport.authenticate('jwt', { session: false }), 
-    autorizarUsuario([1,2, 3]),
+    autorizarUsuario([1,2]),
     serviciosControlador.editarServicioPorId
 );
 
@@ -197,7 +197,7 @@ router.put('/:servicio_id',
 // Eliminar (borrado lógico) un servicio.
 router.delete('/:servicio_id',
     passport.authenticate('jwt', { session: false }), 
-    autorizarUsuario([1,2, 3]),
+    autorizarUsuario([1,2]),
     serviciosControlador.eliminarServicioPorId
 );
 
@@ -251,7 +251,7 @@ router.delete('/:servicio_id',
 // Crear servicio
 router.post('/', 
     passport.authenticate('jwt', { session: false }), 
-    autorizarUsuario([1,2, 3]),
+    autorizarUsuario([1,2]),
     [
         check('descripcion', 'La descripción es obligatoria.').notEmpty(),
 

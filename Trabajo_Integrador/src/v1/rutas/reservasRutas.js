@@ -49,9 +49,9 @@ const router = express.Router();
  *      404:
  *        description: Reserva no encontrada.
 */
-// autorizarUsuarios([1,2,3]) => Admin, empleado y cliente pueden buscar por ID una reserva.
+// autorizarUsuarios([1,2) => Admin y empleado pueden buscar por ID una reserva.
 router.get('/:reserva_id', 
-    autorizarUsuarios([1,2, 3]), 
+    autorizarUsuarios([1]), 
     reservasControlador.buscarPorId
 );
 
@@ -194,7 +194,7 @@ router.get('/', autorizarUsuarios([1,2,3]), reservasControlador.buscarTodos);
  *         description: Error interno del servidor.
  */
 // autorizarUsuarios([1,3]) => Admin y cliente pueden crear una reserva.
-router.post('/', autorizarUsuarios([1,3]), 
+router.post('/', autorizarUsuarios([1, 3]), 
 
     [
         check('fecha_reserva', 'La fecha es necesaria.').notEmpty(),
@@ -331,7 +331,7 @@ router.post('/', autorizarUsuarios([1,3]),
  *         description: Error interno del servidor.
  */
 // Ruta para editar las reservas, solo admnin.
-router.patch('/:reserva_id', autorizarUsuarios([1, 3]), reservasControlador.editar);
+router.patch('/:reserva_id', autorizarUsuarios([1]), reservasControlador.editar);
 
 
 /**
@@ -405,7 +405,7 @@ router.patch('/:reserva_id', autorizarUsuarios([1, 3]), reservasControlador.edit
  *                   example: "Error al borrar la reserva."
  */
 // Borrado lógico.
-router.delete('/:reserva_id', reservasControlador.borrarReserva);
+router.delete('/:reserva_id', autorizarUsuarios([1]), reservasControlador.borrarReserva);
 
 
 export { router };

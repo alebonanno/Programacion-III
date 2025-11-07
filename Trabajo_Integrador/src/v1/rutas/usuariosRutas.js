@@ -87,7 +87,7 @@ const router = express.Router();
 // Obtener todos los usuarios
 router.get('/', 
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1, 3]),
+    autorizarUsuario([1, 2]),
     usuarioController.obtenerUsuarios
 );
 
@@ -191,7 +191,7 @@ router.get('/',
 // Crear usuario.
 router.post('/', 
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1, 3]),
+    autorizarUsuario([1]),
     usuarioController.crearUsuario
 );
 
@@ -302,7 +302,7 @@ router.post('/',
 // Editar usuario.
 router.put('/:id', 
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1, 3]),
+    autorizarUsuario([1]),
     usuarioController.editarUsuario
 );
 
@@ -362,7 +362,7 @@ router.put('/:id',
 // Borrado lógico de usuario.
 router.delete('/id', 
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1, 3]),
+    autorizarUsuario([1]),
     usuarioController.borrarUsuario
 )
     
@@ -446,7 +446,7 @@ router.delete('/id',
  */
 router.get("/:usuario_id",
     passport.authenticate('jwt', { session: false }),
-    autorizarUsuario([1,2, 3]),
+    autorizarUsuario([1]),
     usuarioController.buscarUsuarioPorId
 );
 

@@ -59,7 +59,7 @@ const router = express.Router();
 // Ruta para descargar el informe en CSV o PDF.
 router.get('/', 
     passport.authenticate("jwt", { session: false }), 
-    autorizarUsuarios([1,2,3]), 
+    autorizarUsuarios([1]), 
     descargarReporte
 );
 
