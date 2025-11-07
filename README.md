@@ -20,17 +20,7 @@ Como '.git' está instalado en la carpeta 'Programacion-III',
 
 ## Archivo '.env'.
 
-    -- Como no estaraá subido el archivo '.env', se dejara un ejemplo sin datos sensibles.
-
-    PUERTO=3000
-    USERCORREO=example@gmail.com
-    PASSCORREO=ednm ikse zscs ghjm
-    HOST=localhost
-    USER=reservas
-    DATABASE=example
-    PASSWORD=example
-    # sha2("example", 256)
-    JWT_SECRET=34dfgdfgdfh98dfgdf9g7df9jkw920834953489fgd
+    -- Sera subido sin problemas, luego simplemente se borrara 'la clave de aplicación de google'.
 
 ## Integrantes.
 
