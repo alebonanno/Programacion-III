@@ -13,6 +13,13 @@ Como '.git' está instalado en la carpeta 'Programacion-III',
         'Ctrl + Click' en ' http://localhost:3000/api-docs ' desde la consola y abrira swagger para test.
 
 
+## Roles.
+
+    1 - Admin. 
+    2 - Empleado.
+    3 - Cliente.
+
+
 ## Algoritmo de HASH.
 
     -- La base de datos usa MD5 como algoritmo de Hash.
