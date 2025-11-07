@@ -1,4 +1,4 @@
-## Explicaciónes.
+# Explicaciónes.
 
 Como '.git' está instalado en la carpeta 'Programacion-III',
 
@@ -13,12 +13,12 @@ Como '.git' está instalado en la carpeta 'Programacion-III',
         'Ctrl + Click' en ' http://localhost:3000/api-docs ' desde la consola y abrira swagger para test.
 
 
-# Algoritmo de HASH.
+## Algoritmo de HASH.
 
     -- La base de datos usa MD5 como algoritmo de Hash.
 
 
-# Archivo '.env'.
+## Archivo '.env'.
 
     -- Como no estaraá subido el archivo '.env', se dejara un ejemplo sin datos sensibles.
 
@@ -32,7 +32,7 @@ Como '.git' está instalado en la carpeta 'Programacion-III',
     # sha2("example", 256)
     JWT_SECRET=34dfgdfgdfh98dfgdf9g7df9jkw920834953489fgd
 
-# Integrantes.
+## Integrantes.
 
     Acosta Esteban
     Acosta Mirian
